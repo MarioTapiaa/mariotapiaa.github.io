@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTP Creative Inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --border: rgba(255,255,255,0.08);
+    --accent: #c8f542;
+    --text: #f0ede6;
+    --muted: rgba(240,237,230,0.4);
+    --mono: 'DM Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(200,245,66,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s, width 0.2s, height 0.2s, border-color 0.2s;
+  }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring {
+    width: 48px; height: 48px;
+    border-color: var(--accent);
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+  }
+  nav::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.9) 0%, transparent 100%);
+    z-index: -1;
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Hero */
+  #hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 64px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(200,245,66,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(200,245,66,0.02) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, transparent 70%);
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(80px, 12vw, 160px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.5s;
+  }
+  .hero-title .dim { color: rgba(240,237,230,0.2); }
+  .hero-sub {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+  .hero-desc {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    max-width: 320px;
+    line-height: 1.8;
+  }
+  .hero-scroll {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .hero-scroll:hover { color: var(--accent); }
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    animation: scanline 1.8s ease-in-out infinite;
+  }
+  @keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Marquee strip */
+  .marquee-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 14px 0;
+    background: var(--surface);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+  .marquee-item .dot { color: var(--accent); margin-right: 40px; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* About */
+  #about {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .about-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .about-heading {
+    font-family: var(--display);
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .about-body {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 2;
+    margin-bottom: 40px;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .service-item {
+    background: var(--bg);
+    padding: 24px;
+    transition: background 0.3s;
+  }
+  .service-item:hover { background: var(--surface); }
+  .service-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+  }
+  .service-name {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Work grid */
+  #work {
+    padding: 120px 48px;
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 64px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .section-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+  }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .work-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    cursor: none;
+  }
+  .work-card:nth-child(1) { grid-column: span 8; }
+  .work-card:nth-child(2) { grid-column: span 4; }
+  .work-card:nth-child(3) { grid-column: span 4; }
+  .work-card:nth-child(4) { grid-column: span 8; }
+  .work-card:nth-child(5) { grid-column: span 6; }
+  .work-card:nth-child(6) { grid-column: span 6; }
+
+  .card-inner {
+    aspect-ratio: 16/10;
+    position: relative;
+    overflow: hidden;
+  }
+  .work-card:nth-child(2) .card-inner,
+  .work-card:nth-child(3) .card-inner { aspect-ratio: 4/5; }
+
+  .card-placeholder {
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* To add a real image to a card, replace the .card-placeholder div with:
+     <img src="your-image.jpg" alt="Project name" style="width:100%;height:100%;object-fit:cover;">
+  */
+
+  .placeholder-text {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.08);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(8,8,8,0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .work-card:hover .card-overlay { opacity: 1; }
+  .card-category {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: var(--display);
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  /* Contact */
+  #contact {
+    padding: 120px 48px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .contact-big {
+    font-family: var(--display);
+    font-size: clamp(48px, 7vw, 100px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+  }
+  .contact-big .accent { color: var(--accent); }
+  .contact-email {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .contact-email:hover { color: var(--accent); border-color: var(--accent); }
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-row {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .form-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .form-input, .form-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--text);
+    padding: 0;
+    resize: none;
+  }
+  .form-textarea { min-height: 80px; }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(240,237,230,0.15); }
+  .submit-btn {
+    margin-top: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--accent);
+    color: #080808;
+    border: none;
+    padding: 16px 32px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .submit-btn:hover { background: #d4ff50; transform: translateY(-2px); }
+  .btn-arrow {
+    width: 16px; height: 1px;
+    background: #080808;
+    position: relative;
+  }
+  .btn-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0; top: -3px;
+    width: 6px; height: 6px;
+    border-right: 1px solid #080808;
+    border-top: 1px solid #080808;
+    transform: rotate(45deg);
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(240,237,230,0.2);
+    letter-spacing: 0.1em;
+  }
+  .footer-social {
+    display: flex;
+    gap: 28px;
+  }
+  .footer-social a {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Film grain noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 1000;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ============================================================
+     NAVIGATION
+     - Change the nav links' href values to match your sections
+     ============================================================ -->
+<nav>
+  <a href="#" class="nav-logo"><span>MTP</span> Creative Inc.</a>
+  <ul class="nav-links">
+    <li><a href="#about">Info</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     - Edit the hero-desc text to update your disciplines
+     ============================================================ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <p class="hero-eyebrow">Media Transfer Portal Creative Inc.</p>
+  <h1 class="hero-title">
+    MTP<br><span class="dim">Creative</span>
+  </h1>
+  <div class="hero-sub">
+    <p class="hero-desc">Graphic Design — Motion — 3D — Film</p>
+    <a href="#work" class="hero-scroll">
+      <span class="scroll-line"></span>
+      View Work
+    </a>
+  </div>
+</section>
+
+<!-- Scrolling marquee strip -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="dot">▸</span>Graphic Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>Motion Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>3D</span>
+    <span class="marquee-item"><span class="dot">▸</span>Film</span>
+    <span class="marquee-item"><span class="dot">▸</span>MTP Creative Inc.</span>
+    <span class="marquee-item"><span class="dot">▸</span>Graphic Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>Motion Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>3D</span>
+    <span class="marquee-item"><span class="dot">▸</span>Film</span>
+    <span class="marquee-item"><span class="dot">▸</span>MTP Creative Inc.</span>
+    <span class="marquee-item"><span class="dot">▸</span>Graphic Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>Motion Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>3D</span>
+    <span class="marquee-item"><span class="dot">▸</span>Film</span>
+    <span class="marquee-item"><span class="dot">▸</span>MTP Creative Inc.</span>
+    <span class="marquee-item"><span class="dot">▸</span>Graphic Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>Motion Design</span>
+    <span class="marquee-item"><span class="dot">▸</span>3D</span>
+    <span class="marquee-item"><span class="dot">▸</span>Film</span>
+    <span class="marquee-item"><span class="dot">▸</span>MTP Creative Inc.</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     ABOUT SECTION
+     - Edit the about-body paragraph with your own bio
+     ============================================================ -->
+<section id="about">
+  <div>
+    <p class="about-label">// About</p>
+    <h2 class="about-heading">Media<br>Transfer<br>Portal</h2>
+  </div>
+  <div>
+    <p class="about-body">MTP Creative Inc. is a multidisciplinary creative studio working at the intersection of graphic design, motion, 3D, and film. Every project is approached with craft, intention, and a commitment to visual excellence.</p>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="service-num">01</div>
+        <div class="service-name">Graphic Design</div>
+      </div>
+      <div class="service-item">
+        <div class="service-num">02</div>
+        <div class="service-name">Motion Design</div>
+      </div>
+      <div class="service-item">
+        <div class="service-num">03</div>
+        <div class="service-name">3D</div>
+      </div>
+      <div class="service-item">
+        <div class="service-num">04</div>
+        <div class="service-name">Film</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WORK SECTION
+     HOW TO ADD YOUR OWN IMAGES:
+     Inside each .card-inner div, find the .card-placeholder div.
+     Replace it with this line (swap the src for your image file):
+       <img src="your-image.jpg" alt="Project Name" style="width:100%;height:100%;object-fit:cover;">
+     Also update the card-category and card-title text.
+     ============================================================ -->
+<section id="work">
+  <div class="section-header">
+    <h2 class="section-title">Selected Work</h2>
+    <span class="section-count">// 06 Projects</span>
+  </div>
+  <div class="work-grid">
+
+    <div class="work-card">
+      <div class="card-inner">
+        <div class="card-placeholder"><span class="placeholder-text">Your image here</span></div>
+        <div class="card-overlay">
+          <p class="card-category">Motion Design</p>
+          <p class="card-title">Project Title</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="card-inner">
+        <div class="card-placeholder"><span class="placeholder-text">Your image here</span></div>
+        <div class="card-overlay">
+          <p class="card-category">3D</p>
+          <p class="card-title">Project Title</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="card-inner">
+        <div class="card-placeholder"><span class="placeholder-text">Your image here</span></div>
+        <div class="card-overlay">
+          <p class="card-category">Film</p>
+          <p class="card-title">Project Title</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="card-inner">
+        <div class="card-placeholder"><span class="placeholder-text">Your image here</span></div>
+        <div class="card-overlay">
+          <p class="card-category">Graphic Design</p>
+          <p class="card-title">Project Title</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="card-inner">
+        <div class="card-placeholder"><span class="placeholder-text">Your image here</span></div>
+        <div class="card-overlay">
+          <p class="card-category">3D</p>
+          <p class="card-title">Project Title</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="card-inner">
+        <div class="card-placeholder"><span class="placeholder-text">Your image here</span></div>
+        <div class="card-overlay">
+          <p class="card-category">Motion Design</p>
+          <p class="card-title">Project Title</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT SECTION
+     - Replace info@mtpcreative.com with your real email (in BOTH places)
+     ============================================================ -->
+<section id="contact">
+  <div>
+    <p class="about-label">// Let's Talk</p>
+    <h2 class="contact-big">Get In<br><span class="accent">Touch</span></h2>
+    <a href="mailto:info@mtpcreative.com" class="contact-email">info@mtpcreative.com</a>
+  </div>
+  <div>
+    <form class="contact-form" onsubmit="return false;">
+      <div class="form-row">
+        <label class="form-label">Name</label>
+        <input class="form-input" type="text" placeholder="Your name">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button class="submit-btn" type="submit">
+        Send Message
+        <span class="btn-arrow"></span>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     - Replace the social links with your real profile URLs
+     ============================================================ -->
+<footer>
+  <div class="footer-logo"><span>MTP</span> Creative Inc.</div>
+  <div class="footer-copy">© 2025 MTP Creative Inc. All rights reserved.</div>
+  <div class="footer-social">
+    <a href="https://instagram.com/YOURUSERNAME">Instagram</a>
+    <a href="https://behance.net/YOURUSERNAME">Behance</a>
+    <a href="https://vimeo.com/YOURUSERNAME">Vimeo</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor follow effect
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Fade-in on scroll for each section
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('#about, #work, #contact').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(40px)';
+    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
