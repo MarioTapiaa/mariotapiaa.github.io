@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms & Conditions — MTP Creative Inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --border: rgba(255,255,255,0.08);
+    --accent: #c8f542;
+    --text: #f0ede6;
+    --muted: rgba(240,237,230,0.4);
+    --mono: 'DM Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 1000;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+  }
+  nav::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.9) 0%, transparent 100%);
+    z-index: -1;
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-back {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--accent); }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 160px 48px 120px;
+  }
+  .page-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1.page-title {
+    font-family: var(--display);
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 16px;
+  }
+  .page-updated {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 64px;
+  }
+
+  section.policy-block {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+  }
+  section.policy-block h2 {
+    font-family: var(--display);
+    font-size: clamp(24px, 3vw, 32px);
+    letter-spacing: 0.02em;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  section.policy-block h3 {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 20px 0 10px;
+  }
+  section.policy-block p, section.policy-block li {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 2;
+    margin-bottom: 12px;
+  }
+  section.policy-block ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 16px;
+  }
+  section.policy-block li::before {
+    content: '▸';
+    color: var(--accent);
+    margin-right: 10px;
+  }
+  section.policy-block a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+  }
+  .policy-disclaimer {
+    margin-top: 48px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(240,237,230,0.3);
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(240,237,230,0.2);
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo"><span>MTP</span> Creative Inc.</a>
+  <a href="/" class="nav-back">← Back to Site</a>
+</nav>
+
+<main>
+  <p class="page-label">// Legal</p>
+  <h1 class="page-title">Terms &<br>Conditions</h1>
+  <p class="page-updated">Effective Date: September 16, 2026</p>
+
+  <section class="policy-block">
+    <p>Welcome to <a href="https://www.mtpcinc.com">www.mtpcinc.com</a> (the "Site"), operated by Media Transfer Portal ("MTP Creative Inc.," "we," "us," or "our"). By accessing or using this Site, you agree to be bound by these Terms & Conditions ("Terms"). If you do not agree with these Terms, please do not use the Site.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>1. Use of This Site</h2>
+    <p>This Site is provided to showcase the creative work, services, and capabilities of MTP Creative Inc., including graphic design, motion design, 3D, and film. You may browse the Site and use the contact form to inquire about our services for personal or business purposes.</p>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use the Site for any unlawful purpose or in violation of these Terms</li>
+      <li>Attempt to gain unauthorized access to the Site or its underlying code</li>
+      <li>Scrape, copy, or reproduce Site content for commercial redistribution</li>
+      <li>Interfere with the Site's functioning or security</li>
+    </ul>
+  </section>
+
+  <section class="policy-block">
+    <h2>2. Intellectual Property</h2>
+    <p>All content on this Site — including but not limited to the studio name, logo, layout, design work, photography, video, motion graphics, and 3D work shown in the portfolio — is the property of MTP Creative Inc. unless otherwise credited, and is protected by applicable copyright and trademark laws.</p>
+    <p>Work shown in the "Selected Work" section may have been created for clients under separate agreements; those clients may retain rights to their respective brands, products, or campaigns. Nothing on this Site grants you a license to use, reproduce, or distribute any of this content without prior written permission.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>3. Project Inquiries & Services</h2>
+    <p>Submitting a message through the contact form is an inquiry only and does not create a contract, project commitment, or client relationship. Any actual project — including scope, pricing, timeline, deliverables, and payment terms — will be governed by a separate written agreement between MTP Creative Inc. and the client, agreed to independently of these Terms.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>4. No Warranties</h2>
+    <p>This Site and its content are provided "as is" and "as available," without warranties of any kind, express or implied. We do not guarantee that the Site will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>5. Limitation of Liability</h2>
+    <p>To the fullest extent permitted by law, MTP Creative Inc. shall not be liable for any indirect, incidental, special, or consequential damages arising out of or related to your use of, or inability to use, this Site.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>6. Third-Party Links</h2>
+    <p>This Site may link to third-party platforms, such as Instagram, Behance, and Vimeo. We do not control and are not responsible for the content, policies, or practices of those third-party sites.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>7. Privacy</h2>
+    <p>Your use of this Site is also governed by our <a href="/privacy.html">Privacy Policy</a>, which explains how we collect and use information submitted through the Site.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>8. Changes to These Terms</h2>
+    <p>We may revise these Terms from time to time. Changes will be posted on this page with a revised effective date. Continued use of the Site after changes are posted constitutes your acceptance of the updated Terms.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>9. Governing Law</h2>
+    <p>These Terms are governed by the laws of the State of Michigan, without regard to its conflict of law principles.</p>
+  </section>
+
+  <section class="policy-block">
+    <h2>10. Contact Us</h2>
+    <p>If you have questions about these Terms, please contact us at:</p>
+    <p>
+      Media Transfer Portal<br>
+      <a href="mailto:info@mtpcinc.com">info@mtpcinc.com</a><br>
+      440 Burroughs St, Detroit, MI Suite 120
+    </p>
+
+    <div class="policy-disclaimer">
+      Disclaimer: This template is provided for general informational purposes and is not legal advice. Consider having it reviewed by an attorney to ensure it meets the requirements applicable to your business and jurisdiction.
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-logo"><span>MTP</span> Creative Inc.</div>
+  <div class="footer-copy">© 2025 MTP Creative Inc. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
